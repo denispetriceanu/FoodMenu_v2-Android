@@ -10,12 +10,16 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.foodmenu_v2.Models.Product;
+
+import java.util.List;
+
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder>{
-    private ProductListData[] list_data;
+    private List<Product> list_data;
 
     // RecyclerView recyclerView;
-    public ProductAdapter(ProductListData[] list_data) {
+    public ProductAdapter(List<Product> list_data) {
         this.list_data = list_data;
     }
     @Override
@@ -28,13 +32,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final ProductListData myListData = list_data[position];
-        holder.name.setText(list_data[position].getProductName());
-        holder.amount.setText(String.valueOf(list_data[position].getAmount()));
+        final Product myListData = list_data.get(position);
+        holder.name.setText(list_data.get(position).getName());
+        holder.amount.setText(String.valueOf(list_data.get(position).getAmount()));
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(),"click on item: " + myListData.getProductName(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(),"click on item: " + myListData.getName(),Toast.LENGTH_SHORT).show();
             }
         });
         holder.increase.setOnClickListener(new View.OnClickListener() {
@@ -58,7 +62,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return list_data.length;
+        return list_data.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
+import com.example.foodmenu_v2.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,8 +15,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-
-import com.example.foodmenu_v2.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -58,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.mybutton) {
-            Intent i = new Intent(getApplicationContext(), set_information.class);
+            Intent i = new Intent(getApplicationContext(), Start_Activity.class);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);

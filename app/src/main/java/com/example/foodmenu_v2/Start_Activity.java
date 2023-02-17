@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class set_information extends AppCompatActivity {
+public class Start_Activity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,7 +16,7 @@ public class set_information extends AppCompatActivity {
 
         // ToDo: here you can modify night mode
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        setContentView(R.layout.activity_set_information);
+        setContentView(R.layout.activity_start);
 
         Button myButton = findViewById(R.id.buttonNavMeniu);
         myButton.setOnClickListener(new View.OnClickListener() {

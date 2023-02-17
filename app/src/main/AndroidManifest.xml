@@ -16,7 +16,7 @@
             android:exported="false"
             android:label="Finalizează comanda"/>
         <activity
-            android:name=".set_information"
+            android:name=".Start_Activity"
             android:exported="true"
             android:label="Food Menu"/>
         <activity
