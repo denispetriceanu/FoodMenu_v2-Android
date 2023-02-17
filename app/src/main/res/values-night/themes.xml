@@ -1,0 +1,31 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.FoodMenu_v2" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/teal_700</item>
+        <item name="colorPrimaryVariant">@color/dark_purple</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/old_rose</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+</resources>
+<!--<resources xmlns:tools="http://schemas.android.com/tools">-->
+<!--    &lt;!&ndash; Base application theme. &ndash;&gt;-->
+<!--    <style name="Theme.FoodMenu_v2" parent="Theme.MaterialComponents.DayNight.DarkActionBar">-->
+<!--        &lt;!&ndash; Primary brand color. &ndash;&gt;-->
+<!--        <item name="colorPrimary">@color/white</item>-->
+<!--        <item name="android:navigationBarColor">@color/walnut_brown</item>-->
+<!--        <item name="colorPrimaryVariant">@color/dark_purple</item>-->
+<!--        &lt;!&ndash; Secondary brand color. &ndash;&gt;-->
+<!--        <item name="colorSecondary">@color/old_rose</item>-->
+<!--        <item name="colorSecondaryVariant">@color/old_rose</item>-->
+<!--        <item name="colorOnSecondary">@color/black</item>-->
+<!--        &lt;!&ndash; Status bar color. &ndash;&gt;-->
+<!--        <item name="android:statusBarColor">@color/black</item>-->
+<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+<!--    </style>-->
+<!--</resources>-->

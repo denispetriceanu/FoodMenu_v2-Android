@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="custom_red">#d60a1f</color>
+    <color name="custom_gray">#5d6d75</color>
+    <color name="custom_blue">#1068d2</color>
+    <color name="custom_green">#0f7868</color>
+
+    <color name="walnut_brown">#605c4e</color>
+    <color name="rose_red">#C33C54</color>
+    <color name="russian_violet">#FF3700B3</color>
+    <color name="old_rose">#C97B84</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="non_photo_blue">#8EE3EF</color>
+    <color name="white">#FFD6BA</color>
+    <color name="mint_green">#D2F1E4</color>
+    <color name="dark_purple">#1F0322</color>
+</resources>

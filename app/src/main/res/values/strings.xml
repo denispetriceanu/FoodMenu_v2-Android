@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">FoodMenu_v2</string>
+    <string name="title_main_dish">The main dish</string>
+    <string name="title_entrees">Entrees</string>
+    <string name="title_drinks">Drinks</string>
+    <string name="title_dessert">Dessert</string>
+    <string name="plus_string">+</string>
+    <string name="text_description">Navigați între meniuri și adăugați cantitatea de produse dorită. Apăsați butonul ”Comandă” din orice meniu pentru a finaliza.</string>
+    <string name="order">Comandă</string>
+    <string name="text_description_order">Odată ce ați finalizat comanda și doriți modifică anuntați un chelner disponibil.</string>
+</resources>

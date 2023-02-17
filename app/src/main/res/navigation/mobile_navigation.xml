@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_dashboard">
+
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="com.example.foodmenu_v2.ui.entrees.EntreesFragment"
+        android:label="@string/title_entrees"
+        tools:layout="@layout/fragment_entrees" />
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.example.foodmenu_v2.ui.theMainDish.TheMainDishFragment"
+        android:label="@string/title_main_dish"
+        tools:layout="@layout/fragment_the_main_dish" />
+
+    <fragment
+        android:id="@+id/navigation_notifications"
+        android:name="com.example.foodmenu_v2.ui.drinks.DrinksFragment"
+        android:label="@string/title_drinks"
+        tools:layout="@layout/fragment_drinks" />
+
+    <fragment
+        android:id="@+id/navigation_dessert"
+        android:name="com.example.foodmenu_v2.ui.dessert.DessertFragment"
+        android:label="@string/title_dessert"
+        tools:layout="@layout/fragment_dessert" />
+</navigation>
