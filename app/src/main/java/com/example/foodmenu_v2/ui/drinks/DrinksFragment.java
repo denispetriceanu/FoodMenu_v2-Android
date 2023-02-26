@@ -27,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class DrinksFragment extends Fragment {
 
@@ -35,8 +36,6 @@ public class DrinksFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
-        DrinksListData = new ArrayList<Product>();
 
         binding = FragmentDrinksBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -51,6 +50,26 @@ public class DrinksFragment extends Fragment {
             }
         });
 
+
+
+
+        return root;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        GetDataFromDb();
+    }
+
+    private void GetDataFromDb(){
+        DrinksListData = new ArrayList<Product>();
         // Get reference to DB Firebase
         DatabaseReference databaseRef = FirebaseDatabase
                 .getInstance("https://foodmenu-v2-default-rtdb.europe-west1.firebasedatabase.app")
@@ -63,15 +82,23 @@ public class DrinksFragment extends Fragment {
                 // make a foreach in returning object
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     HashMap<String, String> map = (HashMap<String, String>) snapshot.getValue();
+                    String id_product = snapshot.getKey();
                     assert map != null;
-                    Product newProduct = new Product(map.get("name"), map.get("time"), map.get("description"), map.get("category"), map.get("price"), 0);
+                    // search if in orderList exist this product
+                    Product newProduct = new Product(id_product, map.get("name"), map.get("time"), map.get("description"), map.get("category"), Integer.parseInt(Objects.requireNonNull(map.get("price"))), 0);
+
+                    for (Product product : MainActivity.orderList)
+                        if (product.getProduct_name().equals(map.get("name"))) {
+                            newProduct.setAmount(product.getAmount());
+                            break; // for efficiency
+                        }
                     DrinksListData.add(newProduct);
                 }
                 if(DrinksListData.size() == 0)
                     Toast.makeText(getContext(), ":| Nu s-a returnat nici un produs in aceasta categorie! :(", Toast.LENGTH_SHORT).show();
 
-                RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.recyclerView);
-                ProductAdapter adapter = new ProductAdapter(DrinksListData);
+                RecyclerView recyclerView = (RecyclerView) requireActivity().findViewById(R.id.recyclerView);
+                ProductAdapter adapter = new ProductAdapter(DrinksListData, getContext());
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 recyclerView.setAdapter(adapter);
@@ -81,14 +108,5 @@ public class DrinksFragment extends Fragment {
                 Toast.makeText(getContext(), ":( Error: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
-
-        return root;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
     }
 }

@@ -1,5 +1,8 @@
 package com.example.foodmenu_v2;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,18 +11,21 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodmenu_v2.Models.Product;
+import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 
 import java.util.List;
 
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder>{
     private List<Product> list_data;
-
+    private Context mContext;
     // RecyclerView recyclerView;
-    public ProductAdapter(List<Product> list_data) {
+    public ProductAdapter(List<Product> list_data, Context context) {
+        this.mContext = context;
         this.list_data = list_data;
     }
     @Override
@@ -30,31 +36,43 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         return viewHolder;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Product myListData = list_data.get(position);
-        holder.name.setText(list_data.get(position).getName());
+        holder.name.setText(list_data.get(position).getProduct_name());
         holder.amount.setText(String.valueOf(list_data.get(position).getAmount()));
+        holder.price.setText("Pret: " + String.valueOf(list_data.get(position).getPrice()) + "lei");
+
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(),"click on item: " + myListData.getName(),Toast.LENGTH_SHORT).show();
+                Intent newIntent = new Intent(mContext, Description.class);
+                newIntent.putExtra("name", myListData.getProduct_name());
+                newIntent.putExtra("price", String.valueOf(myListData.getPrice()));
+                newIntent.putExtra("description", myListData.getDescription());
+                mContext.startActivity(newIntent);
             }
         });
         holder.increase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myListData.setAmount(myListData.getAmount()+1);
-                Toast.makeText(view.getContext(),"Amount increase by 1.",Toast.LENGTH_SHORT).show();
-                holder.amount.setText(String.valueOf(myListData.getAmount()));
+                boolean response = MainActivity.ModifyListProduct(myListData, true);
+                if (response){
+                    DynamicToast.makeSuccess(view.getContext(), "Amount increase by 1.", 100).show();
+                    System.out.println(MainActivity.orderList.toString());
+                    holder.amount.setText(String.valueOf(Integer.parseInt((String) holder.amount.getText())+1));
+                }
             }
         });
         holder.decrease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myListData.setAmount(myListData.getAmount()-1);
-                Toast.makeText(view.getContext(),"Amount decrease by 1.",Toast.LENGTH_SHORT).show();
-                holder.amount.setText(String.valueOf(myListData.getAmount()));
+                if (Integer.parseInt((String) holder.amount.getText()) > 0) {
+                    MainActivity.ModifyListProduct(myListData, false);
+                    DynamicToast.makeError(view.getContext(), "Amount decrease by 1.").show();
+                    holder.amount.setText(String.valueOf(Integer.parseInt((String) holder.amount.getText()) - 1));
+                }
             }
         });
     }
@@ -66,16 +84,17 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public RelativeLayout relativeLayout;
-        public TextView name, amount;
+        public ConstraintLayout relativeLayout;
+        public TextView name, amount, price;
         public Button increase, decrease;
         public ViewHolder(View itemView) {
             super(itemView);
             this.amount = (TextView) itemView.findViewById(R.id.amount_data);
+            this.price = (TextView) itemView.findViewById(R.id.textView3);
             this.name = (TextView) itemView.findViewById(R.id.product_name);
             this.increase = (Button) itemView.findViewById(R.id.increase_button);
             this.decrease = (Button) itemView.findViewById(R.id.decrease_button);
-            relativeLayout = (RelativeLayout)itemView.findViewById(R.id.relativeLayoutItem);
+            relativeLayout = (ConstraintLayout)itemView.findViewById(R.id.relativeLayoutItem);
         }
     }
 }

@@ -12,13 +12,17 @@
         android:theme="@style/Theme.FoodMenu_v2"
         tools:targetApi="31">
         <activity
+            android:name=".Description"
+            android:exported="false"
+            android:label="Description"/>
+        <activity
             android:name=".ResumeOfOrder"
             android:exported="false"
-            android:label="Finalizează comanda"/>
+            android:label="Finalizează comanda" />
         <activity
             android:name=".Start_Activity"
             android:exported="true"
-            android:label="Food Menu"/>
+            android:label="Food Menu" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

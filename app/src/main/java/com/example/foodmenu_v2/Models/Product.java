@@ -1,22 +1,60 @@
 package com.example.foodmenu_v2.Models;
 
-public class Product {
-    String name, time, description, category;
-    int price;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-    public Product(String name, String time, String description, String category, String price, int amount) {
-        this.name = name;
+import androidx.annotation.NonNull;
+
+public class Product implements Parcelable {
+    // product -> the id of product
+    // product_name -> name of product
+    String product_name, time, description, category, product;
+    int price, amount;
+
+    public Product(String product, String product_name, String time, String description, String category, int price, int amount) {
+        this.product_name = product_name;
         this.time = time;
         this.description = description;
         this.category = category;
+        this.product = product;
+        this.price = price;
         this.amount = amount;
-        this.price = Integer.parseInt(price);
+    }
+
+    protected Product(Parcel in) {
+        product_name = in.readString();
+        time = in.readString();
+        description = in.readString();
+        category = in.readString();
+        product = in.readString();
+        price = in.readInt();
+        amount = in.readInt();
+    }
+
+    public static final Creator<Product> CREATOR = new Creator<Product>() {
+        @Override
+        public Product createFromParcel(Parcel in) {
+            return new Product(in);
+        }
+
+        @Override
+        public Product[] newArray(int size) {
+            return new Product[size];
+        }
+    };
+
+    public String getProduct() {
+        return product;
+    }
+
+    public void setProduct(String product) {
+        this.product = product;
     }
 
     @Override
     public String toString() {
         return "Product{" +
-                "name='" + name + '\'' +
+                "name='" + product_name + '\'' +
                 ", time='" + time + '\'' +
                 ", description='" + description + '\'' +
                 ", category='" + category + '\'' +
@@ -33,14 +71,12 @@ public class Product {
         this.amount = amount;
     }
 
-    int amount;
-
-    public String getName() {
-        return name;
+    public String getProduct_name() {
+        return product_name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProduct_name(String product_name) {
+        this.product_name = product_name;
     }
 
     public String getTime() {
@@ -73,5 +109,21 @@ public class Product {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel parcel, int i) {
+        parcel.writeString(product_name);
+        parcel.writeString(time);
+        parcel.writeString(description);
+        parcel.writeString(category);
+        parcel.writeString(product);
+        parcel.writeInt(price);
+        parcel.writeInt(amount);
     }
 }
