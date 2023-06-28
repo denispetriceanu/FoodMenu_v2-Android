@@ -46,12 +46,8 @@ public class DrinksFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 MainActivity.NavigateToFinishCommand(root.getContext());
-
             }
         });
-
-
-
 
         return root;
     }

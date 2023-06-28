@@ -2,15 +2,16 @@ package com.example.foodmenu_v2;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.foodmenu_v2.Models.Product;
 import com.example.foodmenu_v2.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.navigation.NavController;
@@ -29,6 +30,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Here check if table and waiter name is set
+        SharedPreferences sharedPref = getSharedPreferences("MyPreferences", MODE_PRIVATE);
+        boolean isSet = sharedPref.getBoolean("isSet", true);
+        if(!isSet){
+            Intent i = new Intent(getApplicationContext(), CheckSecurity.class);
+            startActivity(i);
+        }
         // ToDo: here you can modify night mode
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
@@ -67,17 +75,34 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.mybutton) {
-            Intent i = new Intent(getApplicationContext(), Start_Activity.class);
+            Intent i = new Intent(getApplicationContext(), CheckSecurity.class);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        System.out.println("Back apasat");
+        finish(); // inchiderea activitatii curente
+    }
 
     public static void NavigateToFinishCommand(Context appContext) {
         Intent i = new Intent(appContext, ResumeOfOrder.class);
-        i.putParcelableArrayListExtra("orderList", orderList);
+        // Clean productList by products without amount;
+        i.putParcelableArrayListExtra("orderList", CleanProductList(orderList));
         appContext.startActivity(i);
+    }
+
+    // CleanProductList -> remove all element which have amount 0;
+    // receive 1 parameter: productList -> array<product> - a copy of products;
+    private static ArrayList<Product> CleanProductList(ArrayList<Product> productList) {
+        ArrayList<Product> newProduct = new ArrayList<>();
+        for (Product prod : productList) {
+            if (prod.getAmount() > 0)
+                newProduct.add(prod);
+        }
+        return newProduct;
     }
 
     // Receive to parameter - new product = product which will be put in list,

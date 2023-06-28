@@ -5,6 +5,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.OnReceiveContentListener;
 import android.view.View;
@@ -28,8 +30,10 @@ import java.util.List;
 
 public class ResumeOfOrder extends AppCompatActivity {
     ProductAdapter adapter;
+    String waiter_name, table;
     RecyclerView recyclerView;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +41,7 @@ public class ResumeOfOrder extends AppCompatActivity {
         Button sendOrderButton = (Button) this.findViewById(R.id.sendOrder);
 
         ArrayList<Product> productList = getIntent().getParcelableArrayListExtra("orderList");
-//        System.out.println(productList);
+
 
         recyclerView = (RecyclerView) this.findViewById(R.id.recyclerView);
         adapter = new ProductAdapter(productList, getApplicationContext());
@@ -48,32 +52,38 @@ public class ResumeOfOrder extends AppCompatActivity {
         TextView price_calc = this.findViewById(R.id.textView4);
         price_calc.setText("Prețul total: " + calcTotalPrice(productList));
 
+        GetSharedInformation();
+
         sendOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String timestampStr = DateTimeFormatter.ISO_INSTANT.format(Instant.now());
-                // ToDo: finish information collection
-                Order newOrder = new Order("Denis", timestampStr, String.valueOf(calcTotalPrice(productList)), "1", productList);
+                int totPrice = calcTotalPrice(productList);
+                if (totPrice > 0) {
+                    String timestampStr = DateTimeFormatter.ISO_INSTANT.format(Instant.now());
+                    // ToDo: finish information collection
+                    Order newOrder = new Order(waiter_name, timestampStr, String.valueOf(totPrice), table, productList);
+                    FirebaseDatabase
+                            .getInstance("https://foodmenu-v2-default-rtdb.europe-west1.firebasedatabase.app")
+                            .getReference("Orders")
+                            .push().
+                            setValue(newOrder)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    // Clean orderList
+                                    MainActivity.ResetOrderList();
+                                    productList.clear();
+                                    // update recyclerView
+                                    adapter = new ProductAdapter(productList, getApplicationContext());
+                                    recyclerView.setAdapter(adapter);
+                                    // Show message success
+                                    DynamicToast.makeSuccess(getApplicationContext(), "Comanda a fost plasată cu succes!!", Toast.LENGTH_SHORT).show();
 
-                FirebaseDatabase
-                        .getInstance("https://foodmenu-v2-default-rtdb.europe-west1.firebasedatabase.app")
-                        .getReference("Orders")
-                        .push().
-                        setValue(newOrder)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                // Clean orderList
-                                MainActivity.ResetOrderList();
-                                productList.clear();
-                                // update recyclerView
-                                adapter = new ProductAdapter(productList, getApplicationContext());
-                                recyclerView.setAdapter(adapter);
-                                // Show message success
-                                DynamicToast.makeSuccess(getApplicationContext(), "Comanda a fost plasată cu succes!!", Toast.LENGTH_SHORT).show();
-
-                            }
-                        });
+                                }
+                            });
+                } else {
+                    Toast.makeText(getApplicationContext(), "NU ai adăugat nici un produs în listă.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -83,5 +93,12 @@ public class ResumeOfOrder extends AppCompatActivity {
         for (Product prod : productList)
             sum += prod.getPrice();
         return sum;
+    }
+
+    private void GetSharedInformation() {
+        SharedPreferences sharedPref = getSharedPreferences("MyPreferences", MODE_PRIVATE);
+        waiter_name = sharedPref.getString("waiter_name", "");
+        table = sharedPref.getString("table", "");
+        Toast.makeText(getApplicationContext(), "Waiter: " + waiter_name + " and table: " + table + " . You can set this from main menu.", Toast.LENGTH_LONG).show();
     }
 }
